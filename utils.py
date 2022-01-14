@@ -2,6 +2,7 @@ import pathlib
 
 import numpy as np
 import pandas as pd
+import math
 from matplotlib import pyplot as plt
 from numpy.random import RandomState
 from sklearn.model_selection import KFold
@@ -38,8 +39,10 @@ def accuracy(y: np.array, y_pred: np.array):
     assert y.ndim == 1
 
     # ====== YOUR CODE: ======
-    result = y - y_pred
-    num_of_equal_vals = np.where(result == 0)
+    num_of_equal_vals = 0
+    for index in range(len(y)):
+        if y[index] == y_pred[index]:
+            num_of_equal_vals += 1
     size_of_array = len(y)
 
     accuracy_val = num_of_equal_vals / size_of_array
@@ -65,14 +68,14 @@ def l2_dist(x1: np.array, x2: np.array):
     dists = None
 
     # ====== YOUR CODE: ======
-    dists = np.full([x1.shape[0], x2.shape[0]], 0)
-    for row_x1 in x1:
-        for row_x2 in x2:
+    dists = np.full([x1.shape[0], x2.shape[0]], 0, dtype=float)
+    for index_x1, row_x1 in enumerate(x1):
+        for index_x2, row_x2 in enumerate(x2):
             diff = row_x2 - row_x1
             sum = 0
             for d in diff:
                 sum += d ** 2
-            dists[row_x1][row_x2] = sum
+            dists[index_x1][index_x2] = math.sqrt(sum)
 
     # ========================
 
