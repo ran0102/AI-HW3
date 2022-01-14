@@ -32,7 +32,8 @@ class ID3:
         impurity = 0.0
 
         # ====== YOUR CODE: ======
-        raise NotImplementedError
+        for key in counts.keys():
+            impurity += -(counts[key]/len(rows))*math.log2(counts[key]/len(rows))
         # ========================
 
         return impurity
@@ -56,7 +57,13 @@ class ID3:
 
         info_gain_value = 0.0
         # ====== YOUR CODE: ======
-        raise NotImplementedError
+        num_of_left_samples_from_all_samples = len(left)/(len(left)+len(right))
+        num_of_right_samples_from_all_samples = len(right)/(len(left)+len(right))
+        entropy_of_left_son = ID3.entropy(left, left_labels)
+        entropy_of_right_son = ID3.entropy(right, right_labels)
+        info_gain_value = current_uncertainty
+        info_gain_value -= num_of_left_samples_from_all_samples * entropy_of_left_son
+        info_gain_value -= num_of_right_samples_from_all_samples * entropy_of_right_son
         # ========================
 
         return info_gain_value
@@ -79,7 +86,19 @@ class ID3:
         assert len(rows) == len(labels), 'Rows size should be equal to labels size.'
 
         # ====== YOUR CODE: ======
-        raise NotImplementedError
+        true_rows = np.array([])
+        true_labels = np.array([])
+        false_rows = np.array([])
+        false_labels = np.array([])
+        for i in range(rows):
+            if question.match(rows[i]):
+                np.append(true_rows, rows[i])
+                np.append(true_labels, labels[i])
+            else:
+                np.append(false_rows, rows[i])
+                np.append(false_labels, labels[i])
+        gain = self.info_gain(false_rows, false_labels, true_rows, true_labels, current_uncertainty)
+
         # ========================
 
         return gain, true_rows, true_labels, false_rows, false_labels
