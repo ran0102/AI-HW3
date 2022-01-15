@@ -62,7 +62,10 @@ def basic_experiment(x_train, y_train, x_test, y_test, formatted_print=False):
     acc = None
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError
+    id3 = ID3(['B', 'M'])
+    id3.fit(x_train, y_train)
+    y_pred = id3.predict(x_test)
+    acc = accuracy(y_test, y_pred)
     # ========================
 
     assert acc > 0.9, 'you should get an accuracy of at least 90% for the full ID3 decision tree'
@@ -142,7 +145,8 @@ if __name__ == '__main__':
     """
     formatted_print = True
     basic_experiment(*data_split, formatted_print)
-
+    print("****DONE****")
+    exit(0)
     """
        cross validation experiment
        (*) To run the cross validation experiment over the  M pruning hyper-parameter 
