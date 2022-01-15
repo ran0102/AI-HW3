@@ -88,19 +88,20 @@ class ID3:
         assert len(rows) == len(labels), 'Rows size should be equal to labels size.'
 
         # ====== YOUR CODE: ======
-        true_rows = np.array([])
+        true_rows = np.array([rows[0]])
         true_labels = np.array([])
-        false_rows = np.array([])
+        false_rows = np.array([rows[0]])
         false_labels = np.array([])
         for i in range(len(rows)):
             if question.match(rows[i]):
-                true_rows = np.append(true_rows, [rows[i]])
+                true_rows = np.append(true_rows, [rows[i]], axis=0)
                 true_labels = np.append(true_labels, labels[i])
             else:
-                false_rows = np.append(false_rows, [rows[i]])
+                false_rows = np.append(false_rows, [rows[i]], axis=0)
                 false_labels = np.append(false_labels, labels[i])
+        true_rows = np.delete(true_rows, 0, axis=0)
+        false_rows = np.delete(false_rows, 0, axis=0)
         gain = self.info_gain(false_rows, false_labels, true_rows, true_labels, current_uncertainty)
-
         # ========================
 
         return gain, true_rows, true_labels, false_rows, false_labels
@@ -123,9 +124,8 @@ class ID3:
 
         # ====== YOUR CODE: ======
         attributes_names, _, _ = load_data_set("ID3")
+        attributes_names.remove(self.target_attribute)
         for attr_index, attr_name in enumerate(attributes_names):
-            if attr_name == self.target_attribute:
-                continue
             for value in unique_vals(rows, attr_index):
                 question = Question(attr_name, attr_index, value)
                 gain, true_rows, true_labels, false_rows, false_labels = self.partition(rows,

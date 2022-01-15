@@ -145,8 +145,6 @@ if __name__ == '__main__':
     """
     formatted_print = True
     basic_experiment(*data_split, formatted_print)
-    print("****DONE****")
-    exit(0)
     """
        cross validation experiment
        (*) To run the cross validation experiment over the  M pruning hyper-parameter 
