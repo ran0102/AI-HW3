@@ -32,6 +32,32 @@ def get_top_b_features(x, y, b=5, k=51):
 
     # ====== YOUR CODE: ======
     raise NotImplementedError
+    # assume the features are {1, 2, 3, ..., d}
+    # set features_group = {1, 2, 3, ..., d}
+    # while len(features_group) > b:
+    #   for each subset of features_group with size len(features_group)-1:
+    #       run K-fold on this subset of features_group
+    #       save the accuracy of K-fold run
+    #   set features_group to the subset with the best accuracy
+    # return features_group
+    #
+    # Example:
+    # We start with features {1, 2, 3, 4}
+    # We run K-fold on the sets:
+    #   {1, 2, 3}
+    #   {1, 2, 4}
+    #   {1, 3, 4}
+    #   {2, 3, 4}
+    #
+    # Now we choose the set with the best accuracy.
+    # Lets say it's the set {1, 2, 4}
+    # Now we run K-fold on the sets:
+    # {1, 2}
+    # {1, 4}
+    # {2, 4}
+    #
+    # Now choose the set with the best accuracy
+    # And so on... until we get a set with size == b and return it
     # ========================
 
     return top_b_features_indices
@@ -57,7 +83,7 @@ if __name__ == '__main__':
             To run the cross validation experiment over the K,Threshold hyper-parameters
             uncomment below code and run it
     """
-    # run_cross_validation()
+    run_cross_validation()
 
     # # ========================================================================
 

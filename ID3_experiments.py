@@ -1,5 +1,6 @@
 from ID3 import ID3
 from utils import *
+from sklearn.model_selection import KFold
 
 """
 Make the imports of python packages needed
@@ -87,14 +88,27 @@ def cross_validation_experiment(plot_graph=True):
     #  - Test the model on the test set (evaluate the accuracy) and print the result.
 
     best_m = None
-    accuracies = []
-    m_choices = []
+    accuracies = np.array([])
+    m_choices = [5, 10, 15, 20, 25]
     num_folds = 5
 
     # ====== YOUR CODE: ======
     assert len(m_choices) >= 5, 'fill the m_choices list with  at least 5 different values for M.'
-    raise NotImplementedError
 
+    attributes_names, train_dataset, test_dataset = load_data_set('ID3')
+    x_train, y_train, x_test, y_test = get_dataset_split(train_dataset, test_dataset, target_attribute)
+    for m in m_choices:
+        accuracy_per_m = np.array([])
+        kf = KFold(n_splits=5, shuffle=True, random_state=ID)
+        for train_indexes, test_indexes in kf.split(x_train):
+            id3 = ID3(['B', 'M'], min_for_pruning=m)
+            id3.fit(x_train[train_indexes], y_train[train_indexes])
+            y_train_pred = id3.predict(x_train[test_indexes])
+            curr_acc = accuracy(y_train[test_indexes], y_train_pred)
+            accuracy_per_m = np.append(accuracy_per_m, curr_acc)
+        accuracies = np.append(accuracies, np.mean(accuracy_per_m))
+    best_m_index = np.argmax(accuracies)
+    best_m = m_choices[best_m_index]
     # ========================
     accuracies_mean = np.array([np.mean(acc) * 100 for acc in accuracies])
     if plot_graph:
@@ -127,7 +141,10 @@ def best_m_test(x_train, y_train, x_test, y_test, min_for_pruning):
     acc = None
 
     # ====== YOUR CODE: ======
-    raise NotImplementedError
+    id3 = ID3(['B', 'M'], min_for_pruning=min_for_pruning)
+    id3.fit(x_train, y_train)
+    y_pred = id3.predict(x_test)
+    acc = accuracy(y_test, y_pred)
     # ========================
 
     return acc
